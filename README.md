@@ -2,8 +2,11 @@
 
 > **Démonstration pratique** d'une architecture logicielle de niveau production, appliquant les principes de Clean Architecture, Domain-Driven Design, CQRS et Event Sourcing sur une application TypeScript full-stack.
 
-![Node Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
+[![Node.js 20](https://img.shields.io/badge/Node.js-20-339933?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![Express](https://img.shields.io/badge/Express-000000?style=flat&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 
 ---
 
