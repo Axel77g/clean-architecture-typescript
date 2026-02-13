@@ -64,6 +64,11 @@ Application Next JS : (port 8080)
 npm run dev:next
 ```
 
+Base de donnée Mongo
+```bash
+docker compose up
+````
+
 ## Tests et build
 
 Build typescript (sans next js):
