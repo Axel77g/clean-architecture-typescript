@@ -64,7 +64,7 @@ Application Next JS : (port 8080)
 npm run dev:next
 ```
 
-Base de donnée Mongo
+Base de données Mongo
 ```bash
 docker compose up
 ```
