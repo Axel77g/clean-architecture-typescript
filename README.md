@@ -1,20 +1,29 @@
 ### TL:DR
 
-Contexte:
+#### Contexte:
 Ce projet a été conçu comme une démonstration de Clean Architecture et de Domain-Driven Design (DDD) appliqués à la gestion d’un concessionnaire moto (Projet de cours 5ème ESGI). Il illustre la structuration d’une application complexe en sous-domaines, l’usage de CQRS, Event Sourcing et la séparation claire entre domaine, application et infrastructure.
 
-Skills :
+#### Skills:
 Architecture logicielle avancée (Clean Architecture, DDD, CQRS, Event Sourcing)
+
 TypeScript avancé et typage fort
+
 API REST avec Express et application web avec Next.js
+
 Gestion des bases de données multiples (MongoDB + in-memory)
+
 Mise en place de tests unitaires et CI via GitHub Actions
+
 Implémentation de patterns fonctionnels (Result Pattern) et pratiques
 
-Architecture du projet :
+
+#### Architecture du projet :
 InventoryManagement : gestion du stock et des commandes
+
 Maintenance : suivi des maintenances et notifications
+
 TestDrive : planification et suivi des essais de véhicules
+
 Chaque sous-domaine respecte la Clean Architecture et peut être isolé pour microservices.
 
 # Présentation
