@@ -1,4 +1,4 @@
-# Clean Architecture & DDD — Plateforme de Gestion de Concessionnaire Moto
+# 🏍️ Clean Architecture & DDD — Plateforme de Gestion de Concessionnaire Moto
 
 > **Démonstration pratique** d'une architecture logicielle de niveau production, appliquant les principes de Clean Architecture, Domain-Driven Design, CQRS et Event Sourcing sur une application TypeScript full-stack.
 
