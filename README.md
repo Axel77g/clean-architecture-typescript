@@ -277,6 +277,6 @@ Projet académique — ESGI 5ème année
 ---
 
 <p align="center">
-  <b>Développé par <a href="https://github.com/Axel77g">Axel77g</a> & <a href="https://github.com/InsaneBob">InsaneBob</a></b><br>
+  <b>Développé par <a href="https://github.com/Axel77g">Axel77g</a> & <a href="https://github.com/Insane-Bob">Insane-Bob</a></b><br>
   Démonstration d'architecture logicielle avancée
 </p>
