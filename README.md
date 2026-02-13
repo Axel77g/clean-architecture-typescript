@@ -2,7 +2,6 @@
 
 > **Démonstration pratique** d'une architecture logicielle de niveau production, appliquant les principes de Clean Architecture, Domain-Driven Design, CQRS et Event Sourcing sur une application TypeScript full-stack.
 
-[![Build Status](https://github.com/Axel77g/clean-architecture-typescript/actions/workflows/ci.yml/badge.svg)](https://github.com/Axel77g/clean-architecture-typescript/actions)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
 
@@ -268,55 +267,6 @@ npm run lint
 # Interagir avec l'application via CLI
 npm run command -- [nom-de-commande]
 ```
-
----
-
-## 📦 Déploiement
-
-### Option 1 : Monolithe modulaire
-- Déployer Express + Next.js sur une même instance
-- MongoDB hébergé (Atlas, etc.)
-- Recommandé pour MVP et petite échelle
-
-### Option 2 : Microservices
-Chaque sous-domaine peut être extrait en service indépendant :
-1. Isoler le code du sous-domaine (déjà séparé)
-2. Créer un serveur Express dédié
-3. Déployer avec MongoDB dédié ou partagé
-4. Implémenter un message broker (RabbitMQ, Kafka) pour les événements inter-services
-
----
-
-## 📊 Statistiques du Projet
-
-- **Langages** : TypeScript 100%
-- **Sous-domaines** : 3 (InventoryManagement, Maintenance, TestDrive)
-- **Frameworks** : 3 (Express, Next.js, CLI)
-- **Patterns architecture** : 5+ (Clean Arch, DDD, CQRS, Event Sourcing, Result Pattern)
-- **Tests** : Couverture domaines TestDrive & InventoryManagement
-
----
-
-## 🎓 Points d'Apprentissage Clés
-
-Ce projet illustre concrètement :
-
-1. **La séparation des préoccupations** à l'échelle production
-2. **L'impact du typage fort** sur la qualité du code
-3. **Les compromis architecture** (simplicité vs. évolutivité)
-4. **L'importance de l'isolation** pour la testabilité
-5. **La préparation à l'échelle** sans over-engineering initial
-
-**Idéal pour** : Portfolios développeur senior, discussions d'architecture en entretien, démonstration de maîtrise des patterns avancés.
-
----
-
-## 🔗 Liens Utiles
-
-- [Documentation Clean Architecture (Uncle Bob)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
-- [Domain-Driven Design Reference](https://www.domainlanguage.com/ddd/reference/)
-- [CQRS Pattern (Microsoft)](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs)
-- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 
 ---
 
