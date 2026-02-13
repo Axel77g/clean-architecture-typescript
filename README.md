@@ -19,6 +19,7 @@ Ce projet a été conçu comme une démonstration de Clean Architecture et de Do
 
 Chaque sous-domaine respecte la Clean Architecture et peut être isolé pour microservices.
 
+-----
 # Présentation
 
 > Node Version : 20 minimum
