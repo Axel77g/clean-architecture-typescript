@@ -1,177 +1,332 @@
-### TL:DR
+# Clean Architecture & DDD — Plateforme de Gestion de Concessionnaire Moto
 
-#### Contexte:
-Ce projet a été conçu comme une démonstration de Clean Architecture et de Domain-Driven Design (DDD) appliqués à la gestion d’un concessionnaire moto (Projet de cours 5ème ESGI). Il illustre la structuration d’une application complexe en sous-domaines, l’usage de CQRS, Event Sourcing et la séparation claire entre domaine, application et infrastructure.
+> **Démonstration pratique** d'une architecture logicielle de niveau production, appliquant les principes de Clean Architecture, Domain-Driven Design, CQRS et Event Sourcing sur une application TypeScript full-stack.
 
-#### Skills:
-- Architecture logicielle avancée (Clean Architecture, DDD, CQRS, Event Sourcing)
-- TypeScript avancé et typage fort
-- API REST avec Express et application web avec Next.js
-- Gestion des bases de données multiples (MongoDB + in-memory)
-- Mise en place de tests unitaires et CI via GitHub Actions
-- Implémentation de patterns fonctionnels (Result Pattern) et pratiques
+[![Build Status](https://github.com/Axel77g/clean-architecture-typescript/actions/workflows/ci.yml/badge.svg)](https://github.com/Axel77g/clean-architecture-typescript/actions)
+![Node Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)
 
+---
 
-#### Architecture du projet :
-- **InventoryManagement** : gestion du stock et des commandes
-- **Maintenance** : suivi des maintenances et notifications
-- **TestDrive** : planification et suivi des essais de véhicules
+## 📋 Contexte & Objectif
 
-Chaque sous-domaine respecte la Clean Architecture et peut être isolé pour microservices.
+### Problématique
+Comment structurer une application complexe pour assurer **maintenabilité**, **évolutivité** et **testabilité** tout en préparant une éventuelle migration vers une architecture microservices ?
 
------
-# Présentation
+### Solution mise en œuvre
+Ce projet démontre l'implémentation d'une plateforme de gestion de concessionnaire moto organisée autour de **3 sous-domaines métier indépendants**, chacun respectant strictement la Clean Architecture et prêt à être isolé en microservice.
 
-> Node Version : 20 minimum
+**Contexte projet** : Développé dans le cadre d'un cursus 5ème année ESGI comme cas d'étude avancé en architecture logicielle.
 
-## Fonctionnalités Importantes :
+---
 
-- Gestions des véhicules et des pannes
-- Gestion des maintenances + Notifications maintenance (via cron et commandes CLI)
-- Gestions des clients et des conducteurs
-- Gestions des essais et des incidents lors des essais
-- Gestions des stocks concessionnaires et commandes de pièces + Notifications stock bas
-- Upload de fichiers
-- Commandes CLI
-- API REST express
-- Application Next JS
-- Tests du domaine (sous domaine testDrive et inventoryManagement pour exemple) 
+## 💼 Compétences Démontrées
 
-## Installation
+### Architecture & Patterns
+- ✅ **Clean Architecture** — Séparation stricte Domaine / Application / Infrastructure
+- ✅ **Domain-Driven Design (DDD)** — Modélisation riche du domaine avec Value Objects, Entities, Aggregates
+- ✅ **CQRS & Event Sourcing** — Séparation lecture/écriture avec système d'événements et projections asynchrones
+- ✅ **Microservices-ready** — Architecture en sous-domaines isolés et autonomes
+- ✅ **Result Pattern** — Gestion fonctionnelle des erreurs avec typage strict TypeScript
 
-Installer les dépendances de chaque framework : 
+### Stack Technique
+- ✅ **TypeScript avancé** — Typage fort, génériques, Higher-Order Functions
+- ✅ **Frameworks multi-couches** — API REST (Express), Web App (Next.js), CLI
+- ✅ **Gestion de données** — MongoDB (sans ORM) + In-Memory implementations
+- ✅ **CI/CD & Testing** — GitHub Actions, Jest (tests unitaires), ESLint
+- ✅ **Validation & Schema** — Zod pour la validation stricte des inputs
+
+### Bonnes Pratiques
+- ✅ **Immutabilité** — Aucune mutation d'état, objets value-based
+- ✅ **Testabilité** — Domaine totalement isolé et testable unitairement
+- ✅ **API Documentation** — Génération automatique de collection Postman
+- ✅ **Type Safety** — Zero `any`, interfaces contractuelles strictes
+
+---
+
+## 🏗️ Architecture
+
+### Vue d'ensemble
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    INFRASTRUCTURE LAYER                      │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │   Express    │  │   Next.js    │  │   CLI Tool   │      │
+│  │  (REST API)  │  │   (Web UI)   │  │  (Commands)  │      │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘      │
+│         │                  │                  │              │
+│         └──────────────────┴──────────────────┘              │
+│                             │                                │
+│                  ┌──────────▼──────────┐                     │
+│                  │   Core / UseCase    │                     │
+│                  │   Implementations   │                     │
+│                  └──────────┬──────────┘                     │
+└─────────────────────────────┼──────────────────────────────┘
+                              │
+┌─────────────────────────────▼──────────────────────────────┐
+│                     APPLICATION LAYER                       │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
+│  │  Use Cases  │  │ Repositories│  │  Services   │        │
+│  │  (Business  │  │ (Interfaces)│  │ (Interfaces)│        │
+│  │   Logic)    │  └─────────────┘  └─────────────┘        │
+│  └─────────────┘                                            │
+│  ┌──────────────────────────────────────────────┐          │
+│  │         Projections & Event Handlers         │          │
+│  └──────────────────────────────────────────────┘          │
+└─────────────────────────────┬──────────────────────────────┘
+                              │
+┌─────────────────────────────▼──────────────────────────────┐
+│                       DOMAIN LAYER                          │
+│  ┌──────────────────┐  ┌──────────────────┐               │
+│  │  Entities        │  │  Value Objects   │               │
+│  │  • Vehicle       │  │  • Address       │               │
+│  │  • Maintenance   │  │  • SIRET         │               │
+│  │  • Customer      │  │  • UploadedFile  │               │
+│  └──────────────────┘  └──────────────────┘               │
+│  ┌──────────────────────────────────────────────┐         │
+│  │         Domain Events (Event Sourcing)       │         │
+│  └──────────────────────────────────────────────┘         │
+└────────────────────────────────────────────────────────────┘
+```
+
+### Sous-domaines Métier
+
+| Sous-domaine | Responsabilité | Entités principales |
+|--------------|----------------|---------------------|
+| **InventoryManagement** | Gestion du stock de pièces détachées et des commandes | `Part`, `Order`, `Dealer`, `Stock` |
+| **Maintenance** | Suivi des maintenances véhicules et notifications automatiques | `Maintenance`, `Vehicle`, `Failure`, `Notification` |
+| **TestDrive** | Planification et suivi des essais clients | `TestDrive`, `Incident`, `Driver`, `Customer` |
+
+Chaque sous-domaine :
+- Possède ses propres **repositories** et **event stores**
+- Est **complètement isolé** des autres domaines
+- Peut être **déployé indépendamment** en microservice
+- Communique via **événements** (pub/sub pattern)
+
+### Pattern Event Sourcing + CQRS
+
+#### Architecture de projection
+```
+Event Domain → Event Store (MongoDB)
+                    ↓
+            Projection Jobs Queue
+                    ↓
+         Projection Worker (async)
+                    ↓
+        Read Models (materialized views)
+```
+
+**Implémentation clés** :
+- Séparation stricte **Write Model** (événements) et **Read Model** (projections)
+- **Projection Worker** avec système de retry en cas de panne
+- **Event Repository** dédié par sous-domaine (3 collections MongoDB)
+- Événements métier générés directement par les entités domaine
+
+**Point d'amélioration identifié** : Le worker utilise actuellement du polling ; une implémentation avec MongoDB Change Streams améliorerait les performances.
+
+---
+
+## ⚙️ Fonctionnalités Clés
+
+### Métier
+- 🚗 Gestion complète du parc véhicules et historique des pannes
+- 🔧 Suivi des maintenances avec système de notifications automatiques (cron + CLI)
+- 👥 Gestion clients et conducteurs (validations métier strictes)
+- 🏍️ Planification d'essais et traçabilité des incidents
+- 📦 Gestion de stock avec alertes de niveau bas
+- 📁 Upload et gestion de fichiers (photos incidents, documents)
+
+### Technique
+- 🔄 **Event Sourcing** — Historique complet de tous les événements métier
+- 📊 **Projections asynchrones** — Reconstruction des vues de lecture
+- 🎯 **Use Cases fonctionnels** — Higher-Order Functions réutilisables
+- 🛡️ **Validation d'entrée** — Schémas Zod partagés entre frameworks
+- 📝 **Tests automatisés** — Couverture des domaines TestDrive et InventoryManagement
+- 🤖 **CI/CD** — Build, lint, test automatiques sur GitHub Actions
+
+---
+
+## 🛠️ Choix Techniques & Patterns
+
+### 1. Domaine Immutable & Type-Safe
+
+**Choix** : Constructeurs privés, objets immutables, validation métier en amont.
+
+```typescript
+// Exemple : création d'entité validée
+const result = Vehicle.create({
+  vin: "1HGBH41JXMN109186",
+  brand: "Honda",
+  model: "CBR600RR"
+});
+
+if (!result.success) {
+  // ApplicationException avec identifiant unique
+  throw result.error;
+}
+```
+
+**Bénéfices** :
+- Garantie d'invariants métier à tout moment
+- Simplification des tests (pas d'effets de bord)
+- Réduction drastique des bugs d'état incohérent
+
+### 2. Result Pattern avec TypeScript
+
+**Choix** : Alternative fonctionnelle aux exceptions pour le flow applicatif.
+
+```typescript
+type Result<T> = SuccessResult<T> | FailureResult;
+type ResultVoid = VoidResult | FailureResult;
+type OptionalResult<T> = SuccessResult<T> | VoidResult | FailureResult;
+```
+
+**Bénéfices** :
+- Typage exhaustif des cas d'erreur (TypeScript compiler vérifie tous les chemins)
+- Composition fonctionnelle facile (`map`, `flatMap`, `fold`)
+- Remplacement des `try/catch` par du code prévisible
+
+### 3. Use Case Implementation Layer
+
+**Choix** : Abstraction supplémentaire entre frameworks et application.
+
+```typescript
+// Partagé par Express & Next.js
+export const createVehicleUseCase = (request: CreateVehicleRequest) => {
+  // Parse + validate input (Zod schema)
+  // Create domain objects
+  // Execute use case
+  // Return standardized result
+};
+```
+
+**Bénéfices** :
+- Zéro duplication de code entre frameworks
+- Génération automatique de doc API (Postman collection)
+- Remplacement facile d'un framework sans toucher la logique métier
+
+### 4. Repository Pattern avec Implémentations Multiples
+
+**Choix** : Abstractions applicatives + implémentations infrastructure.
+
+**Disponible** :
+- **MongoDB** (production) — Sans ORM (driver natif)
+- **InMemory** (tests) — `InMemoryDataCollection` (tableau amélioré)
+
+**Bénéfices** :
+- Tests rapides sans base de données
+- Switch facile entre implémentations (DI par configuration)
+- Isolation complète de la persistence
+
+---
+
+## 🚀 Mise en Route Rapide
+
+### Prérequis
+- **Node.js** ≥ 20.0
+- **Docker** (pour MongoDB)
+
+### Installation
+
 ```bash
+# Installer toutes les dépendances (root + frameworks)
 npm run install:all
 ```
 
-## Lancements
+### Lancement des services
 
-API Express : (port 3000)
 ```bash
+# 1. Démarrer MongoDB (Docker)
+docker compose up -d
+
+# 2a. Option API REST (port 3000)
 npm run dev:express
-```
 
-Ou
-
-Application Next JS : (port 8080)
-```bash
+# 2b. Option Web App (port 8080)
 npm run dev:next
 ```
 
-Base de données Mongo
-```bash
-docker compose up
-```
+### Tests & CI
 
-## Tests et build
-
-Build typescript (sans next js):
 ```bash
+# Build TypeScript (hors Next.js)
 npm run build
-```
 
-Tests unitaires :
-```bash
+# Tests unitaires (Jest)
 npm run test
-```
 
-Tests linter avec eslint:
-```bash
+# Linter (ESLint)
 npm run lint
 ```
 
-> Note : Ces trois tests sont lancés automatiquement lors d'un push sur chaque Pull Request et par commits sur la branche `main` via GitHub Actions.
+> ⚙️ **CI automatique** : Ces commandes s'exécutent automatiquement via GitHub Actions sur chaque PR et push sur `main`.
 
+### Commandes CLI
 
-## Séparation en sous-domaines
+```bash
+# Interagir avec l'application via CLI
+npm run command -- [nom-de-commande]
+```
 
-Nous avons séparé notre application en trois sous-domaines afin de pouvoir, par la suite, les séparer en microservices :
-- **InventoryManagement** : Permet de gérer les pièces, les commandes et le stock des concessionnaires.
-- **Maintenance** : Permet de gérer les maintenances et les suivis des véhicules.
-- **TestDrive** : Permet de planifier et suivre les essais des véhicules.
+---
 
-Toute notre application respecte cette séparation dans chacune des couches de la Clean Architecture.
+## 📦 Déploiement
 
-## Event Sourcing + CQRS
+### Option 1 : Monolithe modulaire
+- Déployer Express + Next.js sur une même instance
+- MongoDB hébergé (Atlas, etc.)
+- Recommandé pour MVP et petite échelle
 
-- **Event dans le domaine**
-- **Projection dans l'application**
-    - **Projection Worker & Projection Job** : Permet de gérer les projections en arrière-plan et de reprendre en cas de panne temporaire du worker (le read et le write sont séparés).
-    - Un **Event** peut créer plusieurs **ProjectionJob**.
-    - La configuration de la projection est facilitée par l’abstraction de la logique de projection.
-- Un **repository Event** et un **repository ProjectionJob**.
-- Une implémentation de **EventRepository** et **ProjectionJobRepository** par sous-domaine (trois implémentations et trois collections MongoDB en conséquence).
-- Le **worker** pourrait être amélioré, car il effectue du polling pour détecter de nouveaux **ProjectionJob** à traiter.
+### Option 2 : Microservices
+Chaque sous-domaine peut être extrait en service indépendant :
+1. Isoler le code du sous-domaine (déjà séparé)
+2. Créer un serveur Express dédié
+3. Déployer avec MongoDB dédié ou partagé
+4. Implémenter un message broker (RabbitMQ, Kafka) pour les événements inter-services
 
-## Domaine
+---
 
-- **Constructeur en privé** -> Permet de valider la logique métier en amont.
-- **Aucune mutation des objets, tout est immutable** -> Recréation d’un objet à chaque modification.
-- **Les events sont instanciés par l’entité elle-même** -> Accès direct aux propriétés privées / maintien plus simple (un seul endroit à modifier).
-- **Tout renvoie des `ApplicationException` avec un identifiant unique**, ce qui permet de comparer les erreurs (cas des tests, par exemple).
-- **Mise en place de tests Jest** pour tester unitairement le domaine.
-- **Utilisation des DTO** (objets sérialisables en JSON) pour servir d’interface entre le domaine et une éventuelle base de données.
-- **Shared** correspond à des classes/objets métier partagés entre plusieurs sous-domaines, comme les adresses ou les SIRET.
+## 📊 Statistiques du Projet
 
-## Application
+- **Langages** : TypeScript 100%
+- **Sous-domaines** : 3 (InventoryManagement, Maintenance, TestDrive)
+- **Frameworks** : 3 (Express, Next.js, CLI)
+- **Patterns architecture** : 5+ (Clean Arch, DDD, CQRS, Event Sourcing, Result Pattern)
+- **Tests** : Couverture domaines TestDrive & InventoryManagement
 
-- **UseCase** -> Paradigme fonctionnel, fonctions d’ordre supérieur, permettant de limiter la base de code et d’améliorer sa lisibilité.
-- **Repository** -> Abstraction de la logique de persistance, permettant de changer de base de données sans modifier le code métier.
-- **Services (si applicable)** -> Abstraction des services interopérables utilisés par nos `UseCase` (ex: `NotificationService`, `FileUploadService`).
-- **Projections** -> Logique de matérialisation des données, centralisant toutes les logiques post-event des sous-domaines.
-- **Commands** -> Permet d’interagir avec l’application via CLI.
+---
 
-### Result Pattern
+## 🎓 Points d'Apprentissage Clés
 
-L’ensemble de l’application utilise le **Result Pattern** pour la majorité des échanges entre Application et Infrastructure.  
-Avec **TypeScript**, nous avons profité d’un typage fort sur nos `UseCase` et `Repository` pour faciliter l’implémentation et la prédiction du comportement de l’application.
+Ce projet illustre concrètement :
 
-Il existe plusieurs types de résultats :
-- `SuccessResult<T>` : Attend une valeur de type `T`, sans erreur.
-- `FailureResult` : Contient une `ApplicationException` avec un message et un identifiant unique en cas d’erreur.
-- `VoidResult` : Aucune valeur de retour, sans erreur.
-- `PaginatedResult<T>` : Retourne une liste de valeurs de type `T`, avec les informations de pagination (`page`, `limit`, `total`).
+1. **La séparation des préoccupations** à l'échelle production
+2. **L'impact du typage fort** sur la qualité du code
+3. **Les compromis architecture** (simplicité vs. évolutivité)
+4. **L'importance de l'isolation** pour la testabilité
+5. **La préparation à l'échelle** sans over-engineering initial
 
-Ensuite, il existe des types d’encapsulation de ces résultats :
-- `Result<T> : SuccessResult<T> | FailureResult` -> Si `success` est vrai, on a un `SuccessResult<T>`, sinon un `FailureResult`.
-- `ResultVoid : VoidResult | FailureResult` -> Si `success` est vrai, on a un `VoidResult`, sinon un `FailureResult`.
-- `ResultPaginated<T> : PaginatedResult<T> | FailureResult` -> Si `success` est vrai, on a un `PaginatedResult<T>`, sinon un `FailureResult`.
-- `OptionalResult<T> : SuccessResult<T> | VoidResult | FailureResult` -> Si `success` est vrai et `empty` est faux, on a un `SuccessResult<T>`, si `empty` est vrai, on a un `VoidResult`, sinon un `FailureResult`.
+**Idéal pour** : Portfolios développeur senior, discussions d'architecture en entretien, démonstration de maîtrise des patterns avancés.
 
-✅ **Fonctionne bien avec le paradigme fonctionnel**, permet d’enchaîner les résultats et de les manipuler facilement.  
-✅ **Simplifie la gestion des erreurs** et permet de prédire le comportement de l’application.
+---
 
-## Infrastructure
+## 🔗 Liens Utiles
 
+- [Documentation Clean Architecture (Uncle Bob)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Domain-Driven Design Reference](https://www.domainlanguage.com/ddd/reference/)
+- [CQRS Pattern (Microsoft)](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 
-- **common** : Implémentation des abstractions applicatives (`Repository`, `Services`)
-    - **Repository** : Deux implémentations, une en mémoire et une en MongoDB.
-    - **InMemory** : Objet `InMemoryDataCollection`, un tableau amélioré pour simplifier l’implémentation des repositories InMemory.
-    - **MongoDB** : Utilisation de MongoDB sans Mongoose.
+---
 
-- **Core**
-    - Instanciation de toutes les classes applicatives utilisées dans nos implémentations framework.
-    - Sélection des implémentations de `common` et choix de celles qui seront utilisées.
-    - Planification des projections et sélection des adaptateurs de `Repository`.
-    - Spécification des **requests** sous forme de schémas **ZOD**, utilisés par **Next.js** et **Express**.
-    - **UseCaseImplementation** : Passerelle entre notre application et notre infrastructure.
-        - Prend en entrée des inputs parsés par nos `requests` (objets bruts).
-        - Crée les objets métier nécessaires pour les `UseCase`.
-        - Utilisé à la fois par **Next.js** et **Express**.
+## 📝 Licence
 
-- **Express**
-    - Les `controllers` sont directement nos `UseCaseImplementation`.
-    - Enregistrement des routes sous la forme `METHOD(PATH, USECASE_IMPLEMENTATION, REQUEST)`.
-    - Génération dynamique d’une **collection Postman** pour tester notre API en utilisant TypeScript pour générer la spécification des paramètres et payloads.
+Projet académique — ESGI 5ème année
 
-- **Next.js**
-    - Les `UseCaseImplementation` prennent en entrée les payloads bruts définis dans `requests`.
-    - Gestion des requêtes selon les règles de Next.js (**server actions**, **server components**).
+---
 
-- **cli** : Contient l'infrastructure pour le montage des commandes CLI ainsi que toutes les commandes executable via la commande npm run command -- [commande], permet d'intéragir via CLI avec l'application
-
-
-Cette approche via **UseCaseImplementation** nous permet de séparer notre framework de notre application avec un cran supplémentaire.  
-✅ **Évite la duplication de code**.  
-✅ **Protège l’entrée avec des `requests` bien spécifiques**.  
-✅ **Permet, dans le cas d’une API, de générer dynamiquement une documentation Postman** pour tester l’application.  
+<p align="center">
+  <b>Développé par <a href="https://github.com/Axel77g">Axel77g</a> & <a href="https://github.com/InsaneBob">InsaneBob</a></b><br>
+  Démonstration d'architecture logicielle avancée
+</p>
